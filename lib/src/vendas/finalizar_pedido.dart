@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:guarana_mania/utils/extensions.dart';
 
 import '../../global/color_global.dart';
+import '../../model/pedidos.dart';
 import '../../model/produtos.dart';
 import '../../pdf/create_pdf.dart';
 
@@ -24,8 +25,6 @@ class WidgetFinalizarPedido extends StatefulWidget {
 class _WidgetFinalizarPedidoState extends State<WidgetFinalizarPedido> {
   @override
   Widget build(BuildContext context) {
-    final fireba = FirebaseFirestore.instance.collection('estoque').snapshots();
-
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
@@ -97,20 +96,42 @@ class _WidgetFinalizarPedidoState extends State<WidgetFinalizarPedido> {
             FloatingActionButton.extended(
               backgroundColor: const Color.fromARGB(255, 104, 187, 107),
               onPressed: () async {
-                List<Produto> produtos = widget.produtosPedido;
-                fireba.forEach((element) {
-                  for (var doc in element.docs) {
-                    for (var p in produtos) {
-                      if (p.nome == doc.data()['produto'] &&
-                          p.tipo == doc.data()['tipo']) {
-                        print(p.nome);
-                        doc.reference.update({
-                          'estoque': FieldValue.increment(-1),
-                        });
-                      }
+                final unique = widget.produtosPedido.toSet().toList();
+                final produtos = unique
+                    .map((p) => ProdutoPedido(
+                          nome: p.nome,
+                          qtde: double.parse(widget.produtosPedido
+                              .where((p2) => p2 == p)
+                              .length
+                              .toString()),
+                          unitario: p.unitario,
+                        ))
+                    .toList();
+                final pedido = Pedidos(
+                  cliente: widget.cliente,
+                  data: DateTime.now(),
+                  produtos: produtos,
+                );
+                final data = pedido.toJson();
+                FirebaseFirestore.instance.collection('pedidos').add(data);
+                // remove estoque itens do estoque
+                final firebaseEstoque = FirebaseFirestore.instance
+                    .collection('produtos')
+                    .snapshots();
+                final estoque = await firebaseEstoque.first;
+                // remove itens do estoque
+                for (final produto in estoque.docs) {
+                  for (final d in data['produtos']) {
+                    if (produto.data()['nome'] == d['nome']) {
+                      FirebaseFirestore.instance
+                          .collection('produtos')
+                          .doc(produto.id)
+                          .update({
+                        'estoque': produto.data()['estoque'] - d['qtde']
+                      });
                     }
                   }
-                }).then((value) => print('ok'));
+                }
               },
               tooltip: 'Increment',
               label: const Text('Finalizar'),

@@ -165,7 +165,7 @@ class _HomeVendasState extends State<HomeVendas> {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(produto.estoque.toString()),
+                                  Text(produto.estoque.toInt().toString()),
                                   Text(produto.unitario.formatted),
                                 ],
                               ),
