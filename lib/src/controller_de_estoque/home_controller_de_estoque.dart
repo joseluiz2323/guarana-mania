@@ -82,7 +82,7 @@ class HomeContollerDeEstoque extends StatelessWidget {
                       );
                     },
                   ),
-                ),
+                ), //sa
               );
             },
           );
