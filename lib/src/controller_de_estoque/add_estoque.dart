@@ -27,7 +27,8 @@ class _EstoqueEditAddState extends State<EstoqueEditAdd> {
     super.initState();
     if (widget.id != null) {
       nomeController.text = widget.produto?.nome ?? '';
-      estoqueController.text = widget.produto?.estoque.toInt().toString() ?? '';
+      estoqueController.text =
+          widget.produto?.estoque?.toInt().toString() ?? '';
     }
   }
 
@@ -63,20 +64,28 @@ class _EstoqueEditAddState extends State<EstoqueEditAdd> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 135, 77, 160),
         onPressed: () async {
-          final Produto estoque = Produto(
-            nome: nomeController.text,
-            estoque: double.parse(estoqueController.text),
-            tipo: widget.produto?.tipo ?? '',
-            classe: widget.produto?.classe ?? '',
-            unitario: widget.produto?.unitario ?? 0,
-          );
-          await FirebaseFirestore.instance
-              .collection('produtos')
-              .doc(widget.id)
-              .update(estoque.toJsonEstoque())
-              .then(
-                (value) => Navigator.pop(context),
-              );
+          if (estoqueController.text == '') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('preencha os campos'),
+              ),
+            );
+          } else {
+            final Produto estoque = Produto(
+              nome: nomeController.text,
+              estoque: double.parse(estoqueController.text),
+              tipo: widget.produto?.tipo ?? '',
+              classe: widget.produto?.classe ?? '',
+              unitario: widget.produto?.unitario ?? 0,
+            );
+            await FirebaseFirestore.instance
+                .collection('produtos')
+                .doc(widget.id)
+                .update(estoque.toJsonEstoque())
+                .then(
+                  (value) => Navigator.pop(context),
+                );
+          }
         },
         child: const Icon(Icons.save),
       ),

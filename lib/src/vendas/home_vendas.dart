@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:grouped_list/grouped_list.dart';
+
 import 'package:guarana_mania/components/text_field_custom.dart';
 import 'package:guarana_mania/global/color_global.dart';
 import 'package:guarana_mania/model/produtos.dart';
@@ -120,6 +121,9 @@ class _HomeVendasState extends State<HomeVendas> {
               child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: FirebaseFirestore.instance
                       .collection('produtos')
+                      .orderBy(
+                        'nome',
+                      )
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
@@ -133,8 +137,13 @@ class _HomeVendasState extends State<HomeVendas> {
                       );
                     }
                     final produtos = snapshot.data?.docs ?? [];
+                    //remover tipo de produtos
+                    final produtosFiltrados = produtos.where((produto) {
+                      return produto.data()['classe'] == 'isfood';
+                    }).toList();
+
                     return GroupedListView<dynamic, String>(
-                      elements: produtos,
+                      elements: produtosFiltrados,
                       groupBy: (element) => element.data()['tipo'],
                       groupComparator: (value1, value2) =>
                           value2.compareTo(value1),
@@ -142,20 +151,26 @@ class _HomeVendasState extends State<HomeVendas> {
                           item1['tipo'].compareTo(item2['tipo']),
                       order: GroupedListOrder.DESC,
                       useStickyGroupSeparators: true,
-                      groupSeparatorBuilder: (String value) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          value.toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                      groupSeparatorBuilder: (String value) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            value.toUpperCase(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        );
+                      },
                       itemBuilder: (c, element) {
                         final produtoData = element;
                         final produto = Produto.fromJson(produtoData.data());
-                        final quantidade =
-                            produtosPedido.where((p) => p == produto).length;
+                        final quantidade = produtosPedido
+                            .where((p) =>
+                                p.nome == produto.nome &&
+                                p.tipo == produto.tipo)
+                            .length;
+
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Card(
@@ -165,7 +180,7 @@ class _HomeVendasState extends State<HomeVendas> {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(produto.estoque.toInt().toString()),
+                                  Text(produto.estoque!.toInt().toString()),
                                   Text(produto.unitario.formatted),
                                 ],
                               ),
@@ -174,8 +189,13 @@ class _HomeVendasState extends State<HomeVendas> {
                                 children: [
                                   AspectRatio(
                                     aspectRatio: 1,
-                                    child: FloatingActionButton(
-                                      child: const Icon(Icons.remove),
+                                    child: MaterialButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          10,
+                                        ),
+                                      ),
+                                      color: ColorGlobal.colorsbackground,
                                       onPressed: () {
                                         setState(() {
                                           final i =
@@ -185,6 +205,8 @@ class _HomeVendasState extends State<HomeVendas> {
                                           }
                                         });
                                       },
+                                      child: const Icon(Icons.remove,
+                                          color: Colors.white),
                                     ),
                                   ),
                                   Padding(
@@ -200,13 +222,29 @@ class _HomeVendasState extends State<HomeVendas> {
                                   ),
                                   AspectRatio(
                                     aspectRatio: 1,
-                                    child: FloatingActionButton(
+                                    child: MaterialButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          10,
+                                        ),
+                                      ),
+                                      color: ColorGlobal.colorsbackground,
                                       onPressed: () {
-                                        setState(() {
-                                          produtosPedido.add(produto);
-                                        });
+                                        //verificar quantos produto esxiste em produtosPedido
+                                        int i = produtosPedido
+                                            .where((p) => p == produto)
+                                            .length;
+
+                                        if (i < produto.estoque!.toDouble()) {
+                                          setState(() {
+                                            produtosPedido.add(produto);
+                                          });
+                                        }
                                       },
-                                      child: const Icon(Icons.add),
+                                      child: const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ],

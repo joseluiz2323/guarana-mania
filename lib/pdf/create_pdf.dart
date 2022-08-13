@@ -183,15 +183,17 @@ class CreatePdf extends StatelessWidget {
           ),
         ),
         pw.Spacer(),
-        pw.Text(
-          ml.toUpperCase(),
-          style: pw.TextStyle(
-            fontSize: fontSize,
-            color: color,
-            font: font,
+        pw.SizedBox(
+          width: 40,
+          child: pw.Text(
+            ml.toUpperCase(),
+            style: pw.TextStyle(
+              fontSize: fontSize,
+              color: color,
+              font: font,
+            ),
           ),
         ),
-        pw.SizedBox(width: 25),
       ],
     );
   }

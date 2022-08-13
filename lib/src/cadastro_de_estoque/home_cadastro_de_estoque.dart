@@ -22,7 +22,11 @@ class HomeEstoque extends StatelessWidget {
         ),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: FirebaseFirestore.instance.collection('produtos').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('produtos')
+            .orderBy('tipo')
+            .orderBy('nome')
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Center(child: Text('Erro ao carregar produtos'));
@@ -86,20 +90,7 @@ class HomeEstoque extends StatelessWidget {
                                     TextButton(
                                       child: const Text('Sim'),
                                       onPressed: () {
-                                        FirebaseFirestore.instance
-                                            .collection('estoque')
-                                            .snapshots()
-                                            .listen((snapshot) {
-                                          for (var doc in snapshot.docs) {
-                                            if (doc.data()['produto'] ==
-                                                    produto.nome &&
-                                                doc.data()['tipo'] ==
-                                                    produto.tipo) {
-                                              produtoData.reference.delete();
-                                              doc.reference.delete();
-                                            }
-                                          }
-                                        });
+                                        produtoData.reference.delete();
                                         Navigator.pop(ctx);
                                       },
                                     ),

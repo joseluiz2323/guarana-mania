@@ -1,10 +1,13 @@
 class Pedidos {
-  final String cliente;
+  final String nome;
+  final String pagamento;
   final DateTime data;
+
   final List<ProdutoPedido> produtos;
 
   Pedidos({
-    required this.cliente,
+    required this.nome,
+    required this.pagamento,
     required this.data,
     required this.produtos,
   });
@@ -16,7 +19,8 @@ class Pedidos {
     final data = DateTime.parse(json['data'] as String);
     // ignore: newline-before-return
     return Pedidos(
-      cliente: json['cliente'] as String,
+      nome: json['nome'] as String,
+      pagamento: json['pagamento'] as String,
       data: data.isUtc ? data.toLocal() : data,
       produtos: (json['produtos'] as List<dynamic>)
           .map((produto) =>
@@ -27,7 +31,8 @@ class Pedidos {
 
   Map<String, dynamic> toJson() {
     return {
-      'cliente': cliente,
+      'nome': nome,
+      'pagamento': pagamento,
       'data': data.toUtc().toIso8601String(),
       'produtos': produtos.map((p) => p.toJson()).toList(),
     };

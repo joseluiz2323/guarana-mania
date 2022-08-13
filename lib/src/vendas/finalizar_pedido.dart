@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:guarana_mania/utils/extensions.dart';
 
 import '../../global/color_global.dart';
@@ -96,41 +97,59 @@ class _WidgetFinalizarPedidoState extends State<WidgetFinalizarPedido> {
             FloatingActionButton.extended(
               backgroundColor: const Color.fromARGB(255, 104, 187, 107),
               onPressed: () async {
-                final unique = widget.produtosPedido.toSet().toList();
-                final produtos = unique
-                    .map((p) => ProdutoPedido(
-                          nome: p.nome,
-                          qtde: double.parse(widget.produtosPedido
-                              .where((p2) => p2 == p)
-                              .length
-                              .toString()),
-                          unitario: p.unitario,
-                        ))
-                    .toList();
-                final pedido = Pedidos(
-                  cliente: widget.cliente,
-                  data: DateTime.now(),
-                  produtos: produtos,
-                );
-                final data = pedido.toJson();
-                FirebaseFirestore.instance.collection('pedidos').add(data);
-                // remove estoque itens do estoque
-                final firebaseEstoque = FirebaseFirestore.instance
-                    .collection('produtos')
-                    .snapshots();
-                final estoque = await firebaseEstoque.first;
-                // remove itens do estoque
-                for (final produto in estoque.docs) {
-                  for (final d in data['produtos']) {
-                    if (produto.data()['nome'] == d['nome']) {
-                      FirebaseFirestore.instance
-                          .collection('produtos')
-                          .doc(produto.id)
-                          .update({
-                        'estoque': produto.data()['estoque'] - d['qtde']
-                      });
+                bool isclick = true;
+                if (isclick) {
+                  isclick = false;
+                  final unique = widget.produtosPedido.toSet().toList();
+                  final produtos = unique
+                      .map((p) => ProdutoPedido(
+                            nome: p.nome,
+                            qtde: double.parse(widget.produtosPedido
+                                .where((p2) => p2 == p)
+                                .length
+                                .toString()),
+                            unitario: p.unitario,
+                          ))
+                      .toList();
+                  final pedido = Pedidos(
+                    nome: widget.cliente,
+                    pagamento: widget.formadePagamento,
+                    data: DateTime.now(),
+                    produtos: produtos,
+                  );
+                  final data = pedido.toJson();
+
+                  FirebaseFirestore.instance.collection('pedidos').add(data);
+                  // remove estoque itens do estoque
+                  Future remove() async {
+                    final firebaseEstoque = FirebaseFirestore.instance
+                        .collection('produtos')
+                        .snapshots();
+                    final estoque = await firebaseEstoque.first;
+
+                    for (final produto in estoque.docs) {
+                      for (final produtoPedido in widget.produtosPedido) {
+                        if (produto.data()['nome'] == produtoPedido.nome &&
+                            produto.data()['tipo'] == produtoPedido.tipo) {
+                          final quantidade = widget.produtosPedido
+                              .where((p) =>
+                                  p.nome == produto.data()['nome'] &&
+                                  p.tipo == produto.data()['tipo'])
+                              .length;
+                          FirebaseFirestore.instance
+                              .collection('produtos')
+                              .doc(produto.id)
+                              .update({
+                            'estoque': produto.data()['estoque'] - quantidade,
+                          });
+                        }
+                      }
                     }
                   }
+
+                  remove().then((value) {
+                    Navigator.pop(context, true);
+                  });
                 }
               },
               tooltip: 'Increment',

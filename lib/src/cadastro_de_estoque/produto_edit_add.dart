@@ -24,8 +24,8 @@ class _ProdutoEditAddState extends State<ProdutoEditAdd> {
   final nomeController = TextEditingController();
   final unitarioController = TextEditingController();
   final qtdeController = TextEditingController();
-  String classe = 'isfood';
   final tipoController = TextEditingController();
+  String classe = 'isfood';
   double precoController = 0.0;
   double estoqueController = 0.0;
 
@@ -149,30 +149,40 @@ class _ProdutoEditAddState extends State<ProdutoEditAdd> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 135, 77, 160),
         onPressed: () async {
-          final Produto produto = Produto(
-            nome: nomeController.text,
-            estoque: estoqueController,
-            unitario: precoController,
-            tipo: tipoController.text,
-            classe: classe,
-          );
-
-          if (widget.id == null) {
-            await FirebaseFirestore.instance
-                .collection('produtos')
-                .add(produto.toJson());
+          if (nomeController.text == '' ||
+              unitarioController.text == '' ||
+              tipoController.text == '') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('preencha os campos'),
+              ),
+            );
           } else {
-            await FirebaseFirestore.instance
-                .collection('produtos')
-                .doc(widget.id)
-                .update(produto.toJson());
-            FirebaseFirestore.instance
-                .collection('estoque')
-                .snapshots()
-                .listen((snapshot) {});
-          }
+            final Produto produto = Produto(
+              nome: nomeController.text,
+              estoque: estoqueController,
+              unitario: precoController,
+              tipo: tipoController.text,
+              classe: classe,
+            );
 
-          Navigator.pop(context);
+            if (widget.id == null) {
+              await FirebaseFirestore.instance
+                  .collection('produtos')
+                  .add(produto.toJson());
+            } else {
+              await FirebaseFirestore.instance
+                  .collection('produtos')
+                  .doc(widget.id)
+                  .update(produto.toJson());
+              FirebaseFirestore.instance
+                  .collection('estoque')
+                  .snapshots()
+                  .listen((snapshot) {});
+            }
+
+            Navigator.pop(context);
+          }
         },
         child: const Icon(Icons.save),
       ),

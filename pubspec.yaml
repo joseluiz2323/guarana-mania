@@ -43,7 +43,12 @@ dependencies:
   firebase_core: ^1.20.0
   flutter_localizations:
     sdk: flutter
+  flutter_launcher_icons: ^0.10.0
 
+flutter_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon.png"
 dev_dependencies:
   flutter_test:
     sdk: flutter
