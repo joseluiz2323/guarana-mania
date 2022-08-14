@@ -26,87 +26,85 @@ class MyHomePage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: ColorGlobal.colorsbackground,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LoginData().isAdmin
-                ? roww(
-                    buthonHomePage(
-                      size,
-                      'Cadastra produto',
-                      'estoque-pronto',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeEstoque(),
-                          ),
-                        );
-                      },
-                    ),
-                    buthonHomePage(
-                      size,
-                      'Contole de estoque',
-                      'estoque',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeContollerDeEstoque(),
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                : Container(),
-            const SizedBox(height: 20),
-            roww(
-              buthonHomePage(
-                size,
-                'Vendas',
-                'cart',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomeVendas(),
-                    ),
-                  );
-                },
-              ),
-              buthonHomePage(
-                size,
-                'Produtos',
-                'package',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomeProdutos(),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            LoginData().isAdmin
-                ? buthonHomePage(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          LoginData().isAdmin
+              ? roww(
+                  buthonHomePage(
                     size,
-                    'Relatorio de Vendas',
-                    'report',
+                    'Cadastra produto',
+                    'estoque-pronto',
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomeRelatorio(),
+                          builder: (context) => const HomeEstoque(),
                         ),
                       );
                     },
-                  )
-                : Container(),
-          ],
-        ),
+                  ),
+                  buthonHomePage(
+                    size,
+                    'Contole de estoque',
+                    'estoque',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeContollerDeEstoque(),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              : Container(),
+          const SizedBox(height: 20),
+          roww(
+            buthonHomePage(
+              size,
+              'Vendas',
+              'cart',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeVendas(),
+                  ),
+                );
+              },
+            ),
+            buthonHomePage(
+              size,
+              'Produtos',
+              'package',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeProdutos(),
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 20),
+          LoginData().isAdmin
+              ? buthonHomePage(
+                  size,
+                  'Relatorio de Vendas',
+                  'report',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeRelatorio(),
+                      ),
+                    );
+                  },
+                )
+              : Container(),
+        ],
       ),
     );
   }
@@ -136,27 +134,35 @@ class MyHomePage extends StatelessWidget {
       child: Card(
         color: ColorGlobal.colorsbackground,
         child: SizedBox(
-          height: size.height * 0.2,
-          width: size.width * 0.42,
+          height: 200,
+          width: 190,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(right: cant ? 10 : 0),
-                child: Image.asset(
-                  'assets/icons_menu/$imagen.png',
-                  color: Colors.white,
-                  width: size.width * 0.2,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  text,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
+                padding: const EdgeInsets.all(30),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: Image.asset(
+                        'assets/icons_menu/$imagen.png',
+                        color: Colors.white,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: FittedBox(
+                        child: Text(
+                          text,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
