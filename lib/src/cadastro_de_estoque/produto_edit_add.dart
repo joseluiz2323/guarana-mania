@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:guarana_mania/components/text_field_custom.dart';
 import 'package:guarana_mania/global/color_global.dart';
 import 'package:guarana_mania/model/produtos.dart';
@@ -27,7 +28,7 @@ class _ProdutoEditAddState extends State<ProdutoEditAdd> {
   final tipoController = TextEditingController();
   String classe = 'isfood';
   double precoController = 0.0;
-  double estoqueController = 0.0;
+  int estoqueController = 0;
 
   @override
   void initState() {
@@ -78,12 +79,6 @@ class _ProdutoEditAddState extends State<ProdutoEditAdd> {
               label: 'Tipo',
               controller: tipoController,
               keyboardType: TextInputType.text,
-              onChanged: (value) {
-                setState(() {
-                  estoqueController =
-                      double.tryParse(value.replaceAll(',', '.')) ?? 0;
-                });
-              },
             ),
             Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 30),

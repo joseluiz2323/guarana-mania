@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:guarana_mania/pdf/create_relatorio_vendas.dart';
 import 'package:guarana_mania/utils/extensions.dart';
 
 import '../../global/color_global.dart';
@@ -17,7 +20,7 @@ class HomeRelatorio extends StatefulWidget {
 class _HomeRelatorioState extends State<HomeRelatorio> {
   DateTime inicio = DateTime.now().start;
   DateTime fim = DateTime.now().end;
-
+  List<Pedidos> pedidosPDF = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +29,23 @@ class _HomeRelatorioState extends State<HomeRelatorio> {
         title: const Text('Vendas Total'),
         centerTitle: true,
         backgroundColor: ColorGlobal.colorsbackground,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.picture_as_pdf),
+            onPressed: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateRelatorioVendas(
+                    pedidosPDF: pedidosPDF,
+                    inicio: inicio,
+                    fim: fim,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -74,6 +94,8 @@ class _HomeRelatorioState extends State<HomeRelatorio> {
                     .where(
                         (p) => p.data.isAfter(inicio) && p.data.isBefore(fim))
                     .toList();
+                pedidosPDF.clear();
+                pedidosPDF.addAll(vendasFiltradas);
                 final total = vendasFiltradas.fold<double>(
                     0.0, (total, e) => total + e.total);
                 return Column(
@@ -83,6 +105,7 @@ class _HomeRelatorioState extends State<HomeRelatorio> {
                         itemCount: vendasFiltradas.length,
                         itemBuilder: (_, index) {
                           final pedido = vendasFiltradas[index];
+
                           return Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),

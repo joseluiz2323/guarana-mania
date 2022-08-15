@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:guarana_mania/components/text_field_custom.dart';
 import 'package:guarana_mania/global/color_global.dart';
 import 'package:guarana_mania/model/produtos.dart';
@@ -27,8 +28,7 @@ class _EstoqueEditAddState extends State<EstoqueEditAdd> {
     super.initState();
     if (widget.id != null) {
       nomeController.text = widget.produto?.nome ?? '';
-      estoqueController.text =
-          widget.produto?.estoque?.toInt().toString() ?? '';
+      estoqueController.text = widget.produto?.estoque.toInt().toString() ?? '';
     }
   }
 
@@ -57,6 +57,7 @@ class _EstoqueEditAddState extends State<EstoqueEditAdd> {
             TextFieldCustom(
               label: 'estoque',
               controller: estoqueController,
+              keyboardType: TextInputType.number,
             ),
           ],
         ),
@@ -73,7 +74,7 @@ class _EstoqueEditAddState extends State<EstoqueEditAdd> {
           } else {
             final Produto estoque = Produto(
               nome: nomeController.text,
-              estoque: double.parse(estoqueController.text),
+              estoque: int.parse(estoqueController.text),
               tipo: widget.produto?.tipo ?? '',
               classe: widget.produto?.classe ?? '',
               unitario: widget.produto?.unitario ?? 0,

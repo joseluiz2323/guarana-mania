@@ -115,7 +115,7 @@ class _HomeContollerDeEstoqueState extends State<HomeContollerDeEstoque> {
                             ),
                           ),
                           Text(
-                            'quantidade: ${produto.estoque!.toInt()}',
+                            'quantidade: ${produto.estoque.toInt()}',
                             style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,

@@ -1,5 +1,6 @@
 class Pedidos {
   final String nome;
+
   final String pagamento;
   final DateTime data;
 
@@ -41,11 +42,13 @@ class Pedidos {
 
 class ProdutoPedido {
   final String nome;
+  final String tipo;
   final double qtde;
   final double unitario;
 
   ProdutoPedido({
     required this.nome,
+    required this.tipo,
     required this.qtde,
     required this.unitario,
   });
@@ -55,6 +58,7 @@ class ProdutoPedido {
   factory ProdutoPedido.fromJson(Map<String, dynamic> json) {
     return ProdutoPedido(
       nome: json['nome'] as String,
+      tipo: json['tipo'].toString(),
       qtde: double.parse(json['qtde'].toString()),
       unitario: double.parse(json['unitario'].toString()),
     );
@@ -63,6 +67,7 @@ class ProdutoPedido {
   Map<String, dynamic> toJson() {
     return {
       'nome': nome,
+      'tipo': tipo,
       'qtde': qtde,
       'unitario': unitario,
     };

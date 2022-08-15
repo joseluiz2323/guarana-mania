@@ -194,7 +194,7 @@ class _HomeProdutosState extends State<HomeProdutos> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(produto.estoque!.toInt().toString()),
+                              Text(produto.estoque.toInt().toString()),
                               Text(produto.unitario.formatted),
                             ],
                           ),
@@ -248,7 +248,7 @@ class _HomeProdutosState extends State<HomeProdutos> {
                                         .where((p) => p == produto)
                                         .length;
 
-                                    if (i < produto.estoque!.toDouble()) {
+                                    if (i < produto.estoque.toDouble()) {
                                       setState(() {
                                         produtosPedido.add(produto);
                                       });
@@ -287,6 +287,7 @@ class _HomeProdutosState extends State<HomeProdutos> {
           final produtos = unique
               .map((p) => ProdutoPedido(
                     nome: p.nome,
+                    tipo: 'Estoque',
                     qtde: double.parse(produtosPedido
                         .where((p2) => p2 == p)
                         .length

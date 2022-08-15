@@ -1,12 +1,12 @@
 class Produto {
   final String nome;
-  double? estoque;
+  final int estoque;
   final double unitario;
   final String tipo;
   final String classe;
   Produto({
     required this.nome,
-    this.estoque,
+    required this.estoque,
     required this.unitario,
     required this.tipo,
     required this.classe,
@@ -15,7 +15,7 @@ class Produto {
   factory Produto.fromJson(Map<String, dynamic> json) {
     return Produto(
       nome: json['nome'] as String,
-      estoque: json['estoque'] ?? 0,
+      estoque: json['estoque'],
       unitario: double.parse(json['unitario'].toString()),
       tipo: json['tipo'] as String,
       classe: json['classe'] as String,
@@ -25,6 +25,7 @@ class Produto {
   Map<String, dynamic> toJson() {
     return {
       'nome': nome,
+      'estoque': estoque,
       'unitario': unitario,
       'tipo': tipo,
       'classe': classe,

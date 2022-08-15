@@ -104,6 +104,7 @@ class _WidgetFinalizarPedidoState extends State<WidgetFinalizarPedido> {
                   final produtos = unique
                       .map((p) => ProdutoPedido(
                             nome: p.nome,
+                            tipo: p.tipo,
                             qtde: double.parse(widget.produtosPedido
                                 .where((p2) => p2 == p)
                                 .length

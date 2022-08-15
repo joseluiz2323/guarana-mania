@@ -180,7 +180,7 @@ class _HomeVendasState extends State<HomeVendas> {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(produto.estoque!.toInt().toString()),
+                                  Text(produto.estoque.toString()),
                                   Text(produto.unitario.formatted),
                                 ],
                               ),
@@ -235,7 +235,7 @@ class _HomeVendasState extends State<HomeVendas> {
                                             .where((p) => p == produto)
                                             .length;
 
-                                        if (i < produto.estoque!.toDouble()) {
+                                        if (i < produto.estoque.toDouble()) {
                                           setState(() {
                                             produtosPedido.add(produto);
                                           });
