@@ -27,7 +27,7 @@ class CreateRelatorioVendas extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: PdfPreview(
-        maxPageWidth: 700,
+        maxPageWidth: 1000,
         allowPrinting: true,
         allowSharing: true,
         canChangePageFormat: false,
@@ -49,11 +49,12 @@ class CreateRelatorioVendas extends StatelessWidget {
     final fontRoboto = await PdfGoogleFonts.robotoLight();
     final fontRobotoRegular = await PdfGoogleFonts.robotoRegular();
     final pdf = pw.Document();
-    // for (int i = 0; i < 10; i++) {
-    //   pedidosPDF.add(pedidosPDF[i]);
-    // }
+    for (int i = 0; i < 700; i++) {
+      pedidosPDF.add(pedidosPDF[0]);
+    }
     pdf.addPage(
       pw.MultiPage(
+        maxPages: 30000,
         pageFormat: PdfPageFormat.a4,
         orientation: pw.PageOrientation.portrait,
         build: (pw.Context context) {
@@ -69,7 +70,26 @@ class CreateRelatorioVendas extends StatelessWidget {
                       height: 40,
                     ),
                   ]),
-                  pw.SizedBox(height: 20),
+                  pw.Row(
+                    children: [
+                      pw.Text(
+                        'Data Inicial : ${inicio.dataFormatted}',
+                        style: pw.TextStyle(
+                          fontSize: 12,
+                          font: fontRobotoRegular,
+                        ),
+                      ),
+                      pw.SizedBox(width: 20),
+                      pw.Text(
+                        'Data Final : ${fim.dataFormatted}',
+                        style: pw.TextStyle(
+                          fontSize: 12,
+                          font: fontRobotoRegular,
+                        ),
+                      ),
+                    ],
+                  ),
+                  pw.SizedBox(height: 10),
                   pw.Center(
                     child: pw.Text(
                       'Relatorio De Vendas',
@@ -79,22 +99,8 @@ class CreateRelatorioVendas extends StatelessWidget {
                       ),
                     ),
                   ),
-                  pw.Text(
-                    'Data Inicial : ${inicio.dataFormatted}',
-                    style: pw.TextStyle(
-                      fontSize: 12,
-                      font: fontRobotoRegular,
-                    ),
-                  ),
-                  pw.Text(
-                    'Data Final : ${fim.dataFormatted}',
-                    style: pw.TextStyle(
-                      fontSize: 12,
-                      font: fontRobotoRegular,
-                    ),
-                  ),
                   line(),
-                  pw.SizedBox(height: 20),
+                  pw.SizedBox(height: 10),
                   ...criaTabela(pedidosPDF),
                 ],
               ),
@@ -120,52 +126,57 @@ class CreateRelatorioVendas extends StatelessWidget {
               'Nome: ${pdf.nome == '' ? 'Nenhuma nome informado' : pdf.nome}'
                   .toUpperCase(),
               style: const pw.TextStyle(
-                fontSize: 12,
+                fontSize: 8,
               ),
             ),
-            pw.SizedBox(height: 5),
             pw.Text(
               pdf.data.dataFormatted,
               style: const pw.TextStyle(
-                fontSize: 10,
+                fontSize: 8,
               ),
             ),
-            pw.SizedBox(height: 5),
             pw.Text(
               'forma de pagamento: ${pdf.pagamento}'.toUpperCase(),
               style: const pw.TextStyle(
-                fontSize: 10,
+                fontSize: 8,
               ),
             ),
-            pw.SizedBox(height: 5),
-            pw.ListView.builder(
-              itemCount: pdf.produtos.length,
-              itemBuilder: (pw.Context context, int index) {
-                return pw.Column(
-                  children: [
-                    pw.Text(
-                      'Produto: ${pdf.produtos[index].tipo}'.toUpperCase(),
-                      style: const pw.TextStyle(
-                        fontSize: 10,
-                      ),
-                    ),
-                    pw.SizedBox(height: 5),
-                    pw.Text(
-                      '${pdf.produtos[index].nome} x ${pdf.produtos[index].qtde.toInt().toString()}',
-                      style: const pw.TextStyle(
-                        fontSize: 10,
-                      ),
-                    ),
-                    pw.SizedBox(height: 5),
-                  ],
-                );
-              },
+            pw.Text(
+              'Produto: '.toUpperCase(),
+              style: const pw.TextStyle(
+                fontSize: 8,
+              ),
             ),
-            pw.SizedBox(height: 10),
+            pw.Wrap(
+              children: [
+                ...List.generate(
+                  pdf.produtos.length,
+                  (index) {
+                    return pw.Padding(
+                        padding: const pw.EdgeInsets.only(
+                            right: 5, top: 5, bottom: 5, left: 5),
+                        child: pw.Column(
+                          mainAxisAlignment: pw.MainAxisAlignment.center,
+                          crossAxisAlignment: pw.CrossAxisAlignment.start,
+                          children: [
+                            pw.Text(pdf.produtos[index].tipo),
+                            pw.SizedBox(height: 1),
+                            pw.Text(
+                              '${pdf.produtos[index].nome} x ${pdf.produtos[index].qtde.toInt().toString()}',
+                              style: const pw.TextStyle(
+                                fontSize: 8,
+                              ),
+                            ),
+                          ],
+                        ));
+                  },
+                ),
+              ],
+            ),
             pw.Text(
               'Total: ${pdf.total.formatted}',
               style: const pw.TextStyle(
-                fontSize: 12,
+                fontSize: 11,
               ),
             ),
             line(),
@@ -181,7 +192,7 @@ class CreateRelatorioVendas extends StatelessWidget {
   line() {
     return pw.Divider(
       thickness: 0.5,
-      height: 20,
+      height: 10,
     );
   }
 

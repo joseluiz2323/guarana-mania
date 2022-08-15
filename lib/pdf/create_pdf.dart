@@ -5,12 +5,13 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:guarana_mania/model/produtos.dart';
-import 'package:guarana_mania/utils/extensions.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+
+import 'package:guarana_mania/model/produtos.dart';
+import 'package:guarana_mania/utils/extensions.dart';
 
 class CreatePdf extends StatelessWidget {
   final List<Produto> produtosPedido;
@@ -74,7 +75,10 @@ class CreatePdf extends StatelessWidget {
                 ),
                 pw.Center(
                   child: pw.Image(
-                    pw.MemoryImage(imagenAgronomic),
+                    pw.MemoryImage(
+                      imagenAgronomic,
+                    ),
+                    dpi: 100,
                     height: 40,
                   ),
                 ),
