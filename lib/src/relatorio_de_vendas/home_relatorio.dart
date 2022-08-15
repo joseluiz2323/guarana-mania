@@ -126,8 +126,26 @@ class _HomeRelatorioState extends State<HomeRelatorio> {
                                 children: [
                                   for (final item in pedido.produtos)
                                     ListTile(
-                                      leading: Text(item.unitario.formatted),
-                                      title: Center(child: Text(item.nome)),
+                                      leading: SizedBox(
+                                          width: 60,
+                                          child: Text(item.unitario.formatted)),
+                                      title: Center(
+                                          child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            item.tipo,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            item.nome,
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          ),
+                                        ],
+                                      )),
                                       trailing:
                                           Text(item.qtde.toInt().toString()),
                                     ),
