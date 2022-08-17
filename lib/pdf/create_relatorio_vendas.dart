@@ -49,9 +49,9 @@ class CreateRelatorioVendas extends StatelessWidget {
     final fontRoboto = await PdfGoogleFonts.robotoLight();
     final fontRobotoRegular = await PdfGoogleFonts.robotoRegular();
     final pdf = pw.Document();
-    for (int i = 0; i < 700; i++) {
-      pedidosPDF.add(pedidosPDF[0]);
-    }
+    // for (int i = 0; i < 700; i++) {
+    //   pedidosPDF.add(pedidosPDF[0]);
+    // }
     pdf.addPage(
       pw.MultiPage(
         maxPages: 30000,
