@@ -4,14 +4,12 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:guarana_mania/model/produtos.dart';
+import 'package:guarana_mania/utils/extensions.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-
-import 'package:guarana_mania/model/produtos.dart';
-import 'package:guarana_mania/utils/extensions.dart';
 
 class CreatePdf extends StatelessWidget {
   final List<Produto> produtosPedido;
@@ -48,8 +46,7 @@ class CreatePdf extends StatelessWidget {
   ) async {
     final imagenAgronomic =
         (await rootBundle.load('assets/logo_pdf.png')).buffer.asUint8List();
-    final fontRoboto = await PdfGoogleFonts.robotoLight();
-    final fontRobotoRegular = await PdfGoogleFonts.robotoRegular();
+    final fontRoboto = await PdfGoogleFonts.robotoMonoBold();
     DateTime currentTime = DateTime.now();
     final pdf = pw.Document();
 
@@ -68,7 +65,7 @@ class CreatePdf extends StatelessWidget {
                   child: pw.Text(
                     'COMPROVANTE DE VENDA',
                     style: pw.TextStyle(
-                      fontSize: 9,
+                      fontSize: 17,
                       font: fontRoboto,
                     ),
                   ),
@@ -78,38 +75,41 @@ class CreatePdf extends StatelessWidget {
                     pw.MemoryImage(
                       imagenAgronomic,
                     ),
-                    dpi: 100,
-                    height: 40,
+                    height: 85,
                   ),
                 ),
-                line(fontRobotoRegular),
+                line(),
                 dualline(
                   textCustom(
-                    'HORÁRIO: ${currentTime.hour}:${currentTime.minute.toString().length == 1 ? 0 : ''}${currentTime.minute}:${currentTime.second}',
+                    'HORÁRIO:${currentTime.hour}:${currentTime.minute.toString().length == 1 ? 0 : ''}${currentTime.minute}:${currentTime.second}',
                     color: PdfColors.black,
+                    fontSize: 13,
                     font: fontRoboto,
                   ),
                   textCustom(
-                    'DATA: ${DateFormat(
+                    'DATA:${DateFormat(
                       DateFormat.yMd('pt_Br').format(currentTime),
                     ).format(
                       DateTime.now(),
                     )}',
                     color: PdfColors.black,
+                    fontSize: 13,
                     font: fontRoboto,
                   ),
                 ),
                 textCustom(
-                  'CLIENTE: ${cliente.toUpperCase()}',
+                  'CLIENTE:${cliente.toUpperCase()}',
                   color: PdfColors.black,
+                  fontSize: 13,
                   font: fontRoboto,
                 ),
                 textCustom(
-                  'FORMA DE PAGAMENTO: ${formadepagamento.toUpperCase()}',
+                  'FORMA DE PAGAMENTO:${formadepagamento.toUpperCase()}',
                   color: PdfColors.black,
+                  fontSize: 13,
                   font: fontRoboto,
                 ),
-                line(fontRobotoRegular),
+                line(),
                 pw.ListView.builder(
                   itemCount: produtosPedido.length,
                   itemBuilder: (_, index) {
@@ -128,20 +128,19 @@ class CreatePdf extends StatelessWidget {
                             .toString(),
                         produto.tipo,
                         produto.nome,
-                        fontSize: 7,
+                        fontSize: 13.7,
                         color: PdfColors.black,
                         font: fontRoboto,
                       );
                     }
                   },
                 ),
-                line(fontRobotoRegular),
+                line(),
                 pw.Row(
                   children: [
-                    pw.SizedBox(width: 15),
                     textCustom(
                       'TOTAL : ${produtosPedido.fold<double>(0, (total, p) => total + p.unitario).formatted}',
-                      fontSize: 8,
+                      fontSize: 15,
                       color: PdfColors.black,
                       font: fontRoboto,
                     ),
@@ -162,56 +161,63 @@ class CreatePdf extends StatelessWidget {
     String quant,
     String tipo,
     String ml, {
-    double fontSize = 6,
+    double fontSize = 12,
     PdfColor? color,
     pw.Font? font,
   }) {
-    return pw.Row(
-      children: [
-        pw.SizedBox(width: 20),
-        pw.Text(
-          '$quant x',
-          style: pw.TextStyle(
-            fontSize: fontSize,
-            color: color,
-            font: font,
-          ),
-        ),
-        pw.Spacer(),
-        pw.Text(
-          tipo.toUpperCase(),
-          style: pw.TextStyle(
-            fontSize: fontSize,
-            color: color,
-            font: font,
-          ),
-        ),
-        pw.Spacer(),
-        pw.SizedBox(
-          width: 40,
-          child: pw.Text(
-            ml.toUpperCase(),
-            style: pw.TextStyle(
-              fontSize: fontSize,
-              color: color,
-              font: font,
+    return pw.SizedBox(
+      width: 800,
+      child: pw.Container(
+        child: pw.Stack(
+          children: [
+            pw.Positioned(
+              left: 0,
+              child: pw.Text(
+                '$quant x',
+                style: pw.TextStyle(
+                  fontSize: fontSize,
+                  color: color,
+                  font: font,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
             ),
-          ),
+            pw.Center(
+              child: pw.Text(
+                tipo.toUpperCase(),
+                style: pw.TextStyle(
+                  fontSize: fontSize,
+                  color: color,
+                  font: font,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ),
+            pw.Positioned(
+              right: 0,
+              child: pw.Container(
+                alignment: pw.Alignment.centerRight,
+                child: pw.Text(
+                  ml.toUpperCase(),
+                  style: pw.TextStyle(
+                    fontSize: ml.length > 6 ? fontSize - 2.5 : fontSize,
+                    color: color,
+                    font: font,
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
-  line(fontRobotoRegular) {
-    return pw.Padding(
-      padding: const pw.EdgeInsets.only(right: 20, left: 20),
-      child: pw.Text(
-        '-----------------------------------------------',
-        style: pw.TextStyle(
-          color: PdfColors.grey,
-          font: fontRobotoRegular,
-        ),
-      ),
+  line() {
+    return pw.Divider(
+      thickness: 2,
+      color: PdfColors.black,
     );
   }
 

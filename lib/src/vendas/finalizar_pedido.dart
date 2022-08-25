@@ -69,7 +69,7 @@ class _WidgetFinalizarPedidoState extends State<WidgetFinalizarPedido> {
                 ),
               ],
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.09),
+            const SizedBox(height: 80),
           ],
         ),
       ),

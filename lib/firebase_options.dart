@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '617652604655',
     projectId: 'guarana-mania-c08e0',
     storageBucket: 'guarana-mania-c08e0.appspot.com',
-    iosClientId: '617652604655-7s0h8s5eq4kqo5poun78ih1pbh8rjl7k.apps.googleusercontent.com',
+    iosClientId:
+        '617652604655-7s0h8s5eq4kqo5poun78ih1pbh8rjl7k.apps.googleusercontent.com',
     iosBundleId: 'com.example.guaranaMania',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '617652604655',
     projectId: 'guarana-mania-c08e0',
     storageBucket: 'guarana-mania-c08e0.appspot.com',
-    iosClientId: '617652604655-7s0h8s5eq4kqo5poun78ih1pbh8rjl7k.apps.googleusercontent.com',
+    iosClientId:
+        '617652604655-7s0h8s5eq4kqo5poun78ih1pbh8rjl7k.apps.googleusercontent.com',
     iosBundleId: 'com.example.guaranaMania',
   );
 }
