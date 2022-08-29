@@ -1,16 +1,74 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import 'package:guarana_mania/src/produtos/home_produtos.dart';
 import 'package:guarana_mania/src/vendas/home_vendas.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../global/color_global.dart';
 import '../../global/login_data.dart';
+import '../../model/atualizacao.dart';
 import '../cadastro_de_estoque/home_cadastro_de_estoque.dart';
 import '../controller_de_estoque/home_controller_de_estoque.dart';
 import '../relatorio_de_vendas/home_relatorio.dart';
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  String? link;
+
+  Future<bool> atualizacaovery() async {
+    final atualizacaoRef =
+        await FirebaseFirestore.instance.collection('atualizacao').get();
+    if (atualizacaoRef.docs.isNotEmpty) {
+      final atualizacaoData = atualizacaoRef.docs.first.data();
+      final atualizacao = Atualizacao.fromJson(atualizacaoData);
+      print(atualizacao.verification);
+      print(atualizacao.link);
+      if (atualizacao.verification) {
+        link = atualizacao.link;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  void initState() {
+    atualizacaovery().then(
+      (_) {
+        if (link != null) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Atualização Disponível"),
+                actions: <Widget>[
+                  ElevatedButton(
+                    child: const Text("Atualizar"),
+                    onPressed: () async {
+                      final url = link ?? '';
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      },
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../../../components/text_field_custom.dart';
 import '../../../global/login_data.dart';
@@ -18,7 +17,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final loginController = TextEditingController();
   final senhaController = TextEditingController();
-
   Future<void> login() async {
     final usuariosRef = await FirebaseFirestore.instance
         .collection('login')
