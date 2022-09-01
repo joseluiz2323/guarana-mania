@@ -27,8 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (atualizacaoRef.docs.isNotEmpty) {
       final atualizacaoData = atualizacaoRef.docs.first.data();
       final atualizacao = Atualizacao.fromJson(atualizacaoData);
-      print(atualizacao.verification);
-      print(atualizacao.link);
+
       if (atualizacao.verification) {
         link = atualizacao.link;
         return true;
@@ -57,6 +56,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       } else {
                         throw 'Could not launch $url';
                       }
+                      final atualizacaoRef =
+                          FirebaseFirestore.instance.collection('atualizacao');
+                      await atualizacaoRef.doc('jZ5hhk9p5kEZXztli8XE').update({
+                        'verification': false,
+                      });
                       Navigator.of(context).pop();
                     },
                   ),

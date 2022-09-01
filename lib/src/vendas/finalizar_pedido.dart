@@ -1,11 +1,13 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:elgin/elgin.dart';
 import 'package:flutter/material.dart';
 import 'package:guarana_mania/utils/extensions.dart';
 
 import '../../global/color_global.dart';
 import '../../model/pedidos.dart';
 import '../../model/produtos.dart';
+import '../../pdf/comprovante_elgin.dart';
 import '../../pdf/create_pdf.dart';
 
 class WidgetFinalizarPedido extends StatefulWidget {
@@ -23,6 +25,8 @@ class WidgetFinalizarPedido extends StatefulWidget {
 }
 
 class _WidgetFinalizarPedidoState extends State<WidgetFinalizarPedido> {
+  String url = 'http://marcus.brasizza.com/imagens/flutter-icon.png';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,25 +37,15 @@ class _WidgetFinalizarPedidoState extends State<WidgetFinalizarPedido> {
         title: const Text('Comprovante'),
         actions: [
           IconButton(
-              icon: const Icon(Icons.print),
-              onPressed: () async {
-                final driver = ElginPrinter(type: ElginPrinterType.MINIPDV);
-                try {
-                  final int? result =
-                      await Elgin.printer.connect(driver: driver);
-                  if (result != null) {
-                    if (result == 0) {
-                      await Elgin.printer.printString('Teste Print');
-                      await Elgin.printer.feed(2);
-                      await Elgin.printer.cut();
-                      await Elgin.printer.disconnect();
-                    }
-                  }
-                } on ElginException catch (e) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(e.error.message)));
-                }
-              })
+            icon: const Icon(Icons.print),
+            onPressed: () async {
+              comproventePrint(
+                produtosPedido: widget.produtosPedido,
+                cliente: widget.cliente,
+                formadepagamento: widget.formadePagamento,
+              );
+            },
+          )
         ],
       ),
       body: Center(
