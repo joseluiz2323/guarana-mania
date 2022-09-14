@@ -20,7 +20,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String? link;
-
+  bool isSwitched = false;
   Future<bool> atualizacaovery() async {
     final atualizacaoRef =
         await FirebaseFirestore.instance.collection('atualizacao').get();
@@ -79,105 +79,184 @@ class _MyHomePageState extends State<MyHomePage> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        foregroundColor: Colors.white,
-        title: const Text(
-          'Guaraná-mania',
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        backgroundColor: ColorGlobal.colorsbackground,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          LoginData().isAdmin
-              ? roww(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/logo.png',
+              scale: 3,
+            ),
+            Center(
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  LoginData().isAdmin
+                      ? buthonHomePage(
+                          size,
+                          'Cadastra produto',
+                          'estoque-pronto',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HomeEstoque(),
+                              ),
+                            );
+                          },
+                        )
+                      : const SizedBox(),
+                  LoginData().isAdmin
+                      ? buthonHomePage(
+                          size,
+                          'Contole de estoque',
+                          'estoque',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const HomeContollerDeEstoque(),
+                              ),
+                            );
+                          },
+                        )
+                      : const SizedBox(),
                   buthonHomePage(
                     size,
-                    'Cadastra produto',
-                    'estoque-pronto',
+                    'Vendas',
+                    'cart',
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomeEstoque(),
+                          builder: (context) => const HomeVendas(),
                         ),
                       );
                     },
                   ),
                   buthonHomePage(
                     size,
-                    'Contole de estoque',
-                    'estoque',
+                    'Produtos',
+                    'package',
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomeContollerDeEstoque(),
+                          builder: (context) => const HomeProdutos(),
                         ),
                       );
                     },
                   ),
-                )
-              : Container(),
-          const SizedBox(height: 20),
-          roww(
-            buthonHomePage(
-              size,
-              'Vendas',
-              'cart',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomeVendas(),
-                  ),
-                );
-              },
-            ),
-            buthonHomePage(
-              size,
-              'Produtos',
-              'package',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomeProdutos(),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 20),
-          LoginData().isAdmin
-              ? buthonHomePage(
-                  size,
-                  'Relatorio de Vendas',
-                  'report',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeRelatorio(),
+                  LoginData().isAdmin
+                      ? buthonHomePage(
+                          size,
+                          'Relatorio de Vendas',
+                          'report',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HomeRelatorio(),
+                              ),
+                            );
+                          },
+                        )
+                      : Container(),
+                  Card(
+                    color: const Color.fromARGB(255, 220, 180, 226),
+                    child: SizedBox(
+                      height: 200,
+                      width: 190,
+                      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                        stream: FirebaseFirestore.instance
+                            .collection('status')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return const Center(
+                              child: Text('Erro ao carregar produtos'),
+                            );
+                          }
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 10),
+                              Text(
+                                isSwitched ? 'ABERTO' : 'FECHADO',
+                                style: TextStyle(
+                                  color: isSwitched ? Colors.green : Colors.red,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Text(
+                                'Situção da loja',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Switch(
+                                value: isSwitched,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isSwitched = value;
+                                    FirebaseFirestore.instance
+                                        .collection('status')
+                                        .doc('GIMTdFGton7oPKEQGDY5')
+                                        .update({
+                                      'status': isSwitched,
+                                    });
+                                  });
+                                },
+                                activeTrackColor: Colors.lightGreenAccent,
+                                activeColor: Colors.green,
+                              ),
+                              Text(
+                                'Visitas: ${snapshot.data!.docs.first.data()['count']}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              const Spacer(),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: 30,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      FirebaseFirestore.instance
+                                          .collection('status')
+                                          .doc('GIMTdFGton7oPKEQGDY5')
+                                          .update({
+                                        'count': 0,
+                                      });
+                                    },
+                                    child: const Text('Zerar'),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
-                    );
-                  },
-                )
-              : Container(),
-        ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-    );
-  }
-
-  Widget roww(widget1, widget2) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        widget1,
-        widget2,
-      ],
     );
   }
 

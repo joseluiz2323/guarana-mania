@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs
 
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guarana_mania/model/produtos.dart';
@@ -27,8 +25,8 @@ class CreatePdf extends StatelessWidget {
     return SizedBox(
       child: PdfPreview(
         maxPageWidth: 700,
-        allowPrinting: true,
-        allowSharing: true,
+        allowPrinting: false,
+        allowSharing: false,
         canChangePageFormat: false,
         canDebug: false,
         build: (format) =>
@@ -46,7 +44,11 @@ class CreatePdf extends StatelessWidget {
   ) async {
     final imagenAgronomic =
         (await rootBundle.load('assets/logo_pdf.png')).buffer.asUint8List();
+    final qrcode =
+        (await rootBundle.load('assets/qrcode.png')).buffer.asUint8List();
     final fontRoboto = await PdfGoogleFonts.robotoMonoBold();
+    final emoji = await PdfGoogleFonts.notoColorEmoji();
+
     DateTime currentTime = DateTime.now();
     final pdf = pw.Document();
 
@@ -65,7 +67,7 @@ class CreatePdf extends StatelessWidget {
                   child: pw.Text(
                     'COMPROVANTE DE VENDA',
                     style: pw.TextStyle(
-                      fontSize: 17,
+                      fontSize: 14,
                       font: fontRoboto,
                     ),
                   ),
@@ -75,7 +77,7 @@ class CreatePdf extends StatelessWidget {
                     pw.MemoryImage(
                       imagenAgronomic,
                     ),
-                    height: 85,
+                    height: 65,
                   ),
                 ),
                 line(),
@@ -83,7 +85,7 @@ class CreatePdf extends StatelessWidget {
                   textCustom(
                     'HORÁRIO:${currentTime.hour}:${currentTime.minute.toString().length == 1 ? 0 : ''}${currentTime.minute}:${currentTime.second}',
                     color: PdfColors.black,
-                    fontSize: 13,
+                    fontSize: 10,
                     font: fontRoboto,
                   ),
                   textCustom(
@@ -93,20 +95,20 @@ class CreatePdf extends StatelessWidget {
                       DateTime.now(),
                     )}',
                     color: PdfColors.black,
-                    fontSize: 13,
+                    fontSize: 10,
                     font: fontRoboto,
                   ),
                 ),
                 textCustom(
                   'CLIENTE:${cliente.toUpperCase()}',
                   color: PdfColors.black,
-                  fontSize: 13,
+                  fontSize: 10,
                   font: fontRoboto,
                 ),
                 textCustom(
                   'FORMA DE PAGAMENTO:${formadepagamento.toUpperCase()}',
                   color: PdfColors.black,
-                  fontSize: 13,
+                  fontSize: 10,
                   font: fontRoboto,
                 ),
                 line(),
@@ -128,7 +130,7 @@ class CreatePdf extends StatelessWidget {
                             .toString(),
                         produto.tipo,
                         produto.nome,
-                        fontSize: 13.7,
+                        fontSize: 10.7,
                         color: PdfColors.black,
                         font: fontRoboto,
                       );
@@ -140,11 +142,29 @@ class CreatePdf extends StatelessWidget {
                   children: [
                     textCustom(
                       'TOTAL : ${produtosPedido.fold<double>(0, (total, p) => total + p.unitario).formatted}',
-                      fontSize: 15,
+                      fontSize: 11,
                       color: PdfColors.black,
                       font: fontRoboto,
                     ),
                   ],
+                ),
+                line(),
+                pw.Center(
+                  child: pw.Image(
+                    pw.MemoryImage(
+                      qrcode,
+                    ),
+                    height: 75,
+                  ),
+                ),
+                pw.Center(
+                  child: pw.Text(
+                    'Obrigado pela preferência 🖤!',
+                    style: pw.TextStyle(
+                      fontFallback: [emoji],
+                      fontSize: 10,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -216,7 +236,7 @@ class CreatePdf extends StatelessWidget {
 
   line() {
     return pw.Divider(
-      thickness: 2,
+      thickness: 1,
       color: PdfColors.black,
     );
   }

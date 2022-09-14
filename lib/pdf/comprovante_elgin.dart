@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:elgin/elgin.dart';
 import 'package:flutter/services.dart';
@@ -61,16 +60,17 @@ void comproventePrint({
             'HORÁRIO:${currentTime.hour}:${currentTime.minute.toString().length == 1 ? 0 : ''}${currentTime.minute}:${currentTime.second}',
             align: ElginAlign.LEFT,
             fontSize: ElginSize.MD);
-        await Elgin.printer.printString('CLIENTE: $cliente',
+        await Elgin.printer.printString('CLIENTE: ${cliente.toUpperCase()}',
             align: ElginAlign.LEFT, fontSize: ElginSize.MD);
         await Elgin.printer.printString(
-          'FORMA DE PAGAMENTO: $formadepagamento',
+          'FORMA DE PAGAMENTO: ${formadepagamento.toUpperCase()}',
         );
         await Elgin.printer.printString('-----------------------------',
             align: ElginAlign.LEFT, fontSize: ElginSize.MD);
         produtosPedidovery.map((produto) {
           return Elgin.printer.printString(
-              '${produto.qtde} x ${produto.tipo.length} ${produto.tipo}  ${produto.nome}',
+              //'${produto.qtde} X ${produto.tipo.length} ${produto.tipo}  ${produto.nome}',
+              '${produto.qtde} X ${produto.tipo.toUpperCase()}  ${produto.nome}',
               align: ElginAlign.LEFT,
               fontSize: ElginSize.MD);
         }).toList();
@@ -81,9 +81,22 @@ void comproventePrint({
             'TOTAL: R\$ ${produtosPedido.map((produto) {
               return produto.unitario;
             }).reduce((a, b) => a + b)}',
-            align: ElginAlign.CENTER,
+            align: ElginAlign.LEFT,
             fontSize: ElginSize.MD);
+        await Elgin.printer.printString('-----------------------------',
+            align: ElginAlign.CENTER, fontSize: ElginSize.MD);
+        try {
+          Uint8List byte = await _getImageFromAsset('assets/qrcode.png');
+          Directory tempPath = await getTemporaryDirectory();
+          File file = File('${tempPath.path}/dash.png');
+          await file.writeAsBytes(byte);
 
+          await file.writeAsBytes(
+              byte.buffer.asUint8List(byte.offsetInBytes, byte.lengthInBytes));
+          await Elgin.printer.printImage(file, false);
+        } catch (e) {}
+        await Elgin.printer.printString('Obrigado pela preferência 🖤!',
+            align: ElginAlign.CENTER, fontSize: ElginSize.MD);
         await Elgin.printer.cut(lines: 5);
 
         await Elgin.printer.disconnect();
