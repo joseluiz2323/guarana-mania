@@ -28,7 +28,7 @@ class TextFieldCustom extends StatelessWidget {
         controller: controller,
         decoration: InputDecoration(
           border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(18.0)),
+            borderRadius: BorderRadius.all(Radius.circular(11.0)),
           ),
           labelText: label,
         ),

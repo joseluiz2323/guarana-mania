@@ -25,8 +25,7 @@ class WidgetFinalizarPedido extends StatefulWidget {
 }
 
 class _WidgetFinalizarPedidoState extends State<WidgetFinalizarPedido> {
-  String url = 'http://marcus.brasizza.com/imagens/flutter-icon.png';
-
+  bool isLoading = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,15 +36,20 @@ class _WidgetFinalizarPedidoState extends State<WidgetFinalizarPedido> {
         title: const Text('Comprovante'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.print),
-            onPressed: () async {
-              comproventePrint(
-                produtosPedido: widget.produtosPedido,
-                cliente: widget.cliente,
-                formadepagamento: widget.formadePagamento,
-              );
-            },
-          )
+              icon: const Icon(Icons.print),
+              onPressed: isLoading
+                  ? () async {
+                      setState(() {
+                        isLoading = false;
+                      });
+                      print('Carregando...');
+                      await comproventePrint(
+                        produtosPedido: widget.produtosPedido,
+                        cliente: widget.cliente,
+                        formadepagamento: widget.formadePagamento,
+                      );
+                    }
+                  : null)
         ],
       ),
       body: Center(

@@ -5,7 +5,7 @@
     <application 
     tools:replace="android:label,android:icon"
     android:name="${applicationName}"
-    android:label="Guarana Mania" 
+    android:label="Guarana Balu" 
     android:icon="@mipmap/ic_launcher">
         <activity android:name=".MainActivity" 
         android:exported="true" 

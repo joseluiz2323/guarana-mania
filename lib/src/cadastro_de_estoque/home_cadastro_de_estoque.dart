@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:guarana_mania/global/color_global.dart';
 import 'package:guarana_mania/model/produtos.dart';
 import 'package:guarana_mania/src/cadastro_de_estoque/produto_edit_add.dart';
@@ -17,7 +16,7 @@ class HomeEstoque extends StatelessWidget {
         centerTitle: true,
         backgroundColor: ColorGlobal.colorsbackground,
         title: const Text(
-          'Casatrar produto',
+          'Cadastro De Produtos',
           style: TextStyle(color: Colors.white),
         ),
       ),

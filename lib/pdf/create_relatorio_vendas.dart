@@ -3,12 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:guarana_mania/utils/extensions.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-
-import 'package:guarana_mania/utils/extensions.dart';
 
 import '../../model/pedidos.dart';
 
@@ -44,14 +42,10 @@ class CreateRelatorioVendas extends StatelessWidget {
     DateTime inicio,
     DateTime fim,
   ) async {
-    final imagenAgronomic =
-        (await rootBundle.load('assets/logo_pdf.png')).buffer.asUint8List();
     final fontRoboto = await PdfGoogleFonts.robotoLight();
     final fontRobotoRegular = await PdfGoogleFonts.robotoRegular();
     final pdf = pw.Document();
-    // for (int i = 0; i < 700; i++) {
-    //   pedidosPDF.add(pedidosPDF[0]);
-    // }
+
     pdf.addPage(
       pw.MultiPage(
         maxPages: 30000,
@@ -65,10 +59,10 @@ class CreateRelatorioVendas extends StatelessWidget {
                 children: [
                   pw.Row(children: [
                     pw.Spacer(),
-                    pw.Image(
-                      pw.MemoryImage(imagenAgronomic),
-                      height: 40,
-                    ),
+                    // pw.Image(
+                    //   pw.MemoryImage(imagenAgronomic),
+                    //   height: 40,
+                    // ),
                   ]),
                   pw.Row(
                     children: [

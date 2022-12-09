@@ -2,23 +2,26 @@ import 'dart:io';
 
 import 'package:elgin/elgin.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_beep/flutter_beep.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../model/produtos.dart';
 import '../model/model_soma.dart';
 
-void comproventePrint({
+Future<void> comproventePrint({
   required List<Produto> produtosPedido,
   required String cliente,
   required String formadepagamento,
 }) async {
+  FlutterBeep.beep();
   List<ProdutosModelSoma> produtosPedidovery = [];
   for (var i = 0; i < produtosPedido.length; i++) {
     //se o produto ja foi adicionado a lista, soma a quantidade
     if (produtosPedidovery
         .any((element) => element.nome == produtosPedido[i].nome)) {
       for (var j = 0; j < produtosPedidovery.length; j++) {
-        if (produtosPedidovery[j].nome == produtosPedido[i].nome) {
+        if (produtosPedidovery[j].nome == produtosPedido[i].nome &&
+            produtosPedidovery[j].tipo == produtosPedido[i].tipo) {
           produtosPedidovery[j].qtde += 1;
         }
       }
@@ -43,16 +46,14 @@ void comproventePrint({
         await Elgin.printer.printString('COMPROVANTE DE VENDA',
             align: ElginAlign.CENTER, fontSize: ElginSize.MD, isBold: true);
 
-        try {
-          Uint8List byte = await _getImageFromAsset('assets/logo_pdf.png');
-          Directory tempPath = await getTemporaryDirectory();
-          File file = File('${tempPath.path}/dash.png');
-          await file.writeAsBytes(byte);
+        Uint8List byte = await _getImageFromAsset('assets/logo_pdf.png');
+        Directory tempPath = await getTemporaryDirectory();
+        File file = File('${tempPath.path}/dash.png');
+        await file.writeAsBytes(byte);
+        await file.writeAsBytes(
+            byte.buffer.asUint8List(byte.offsetInBytes, byte.lengthInBytes));
+        await Elgin.printer.printImage(file, false);
 
-          await file.writeAsBytes(
-              byte.buffer.asUint8List(byte.offsetInBytes, byte.lengthInBytes));
-          await Elgin.printer.printImage(file, false);
-        } catch (e) {}
         await Elgin.printer.printString('-----------------------------',
             align: ElginAlign.CENTER, fontSize: ElginSize.MD);
         await Elgin.printer.feed(1);
@@ -85,24 +86,25 @@ void comproventePrint({
             fontSize: ElginSize.MD);
         await Elgin.printer.printString('-----------------------------',
             align: ElginAlign.CENTER, fontSize: ElginSize.MD);
-        try {
-          Uint8List byte = await _getImageFromAsset('assets/qrcode.png');
-          Directory tempPath = await getTemporaryDirectory();
-          File file = File('${tempPath.path}/dash.png');
-          await file.writeAsBytes(byte);
 
-          await file.writeAsBytes(
-              byte.buffer.asUint8List(byte.offsetInBytes, byte.lengthInBytes));
-          await Elgin.printer.printImage(file, false);
-        } catch (e) {}
-        await Elgin.printer.printString('Obrigado pela preferência 🖤!',
+        Uint8List byte2 = await _getImageFromAsset('assets/qrcode.png');
+        Directory tempPath2 = await getTemporaryDirectory();
+        File file2 = File('${tempPath2.path}/dash.png');
+        await file2.writeAsBytes(byte2);
+        await file2.writeAsBytes(
+            byte2.buffer.asUint8List(byte2.offsetInBytes, byte2.lengthInBytes));
+        await Elgin.printer.printImage(file2, false);
+
+        await Elgin.printer.printString('Obrigado pela preferência❤️!',
             align: ElginAlign.CENTER, fontSize: ElginSize.MD);
         await Elgin.printer.cut(lines: 5);
 
         await Elgin.printer.disconnect();
       }
     }
-  } on ElginException {}
+  } on ElginException {
+    print('Erro ao imprimir');
+  }
 }
 
 Future<Uint8List> readFileBytes(String path) async {

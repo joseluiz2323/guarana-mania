@@ -44,42 +44,39 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCDGhmQwDzaaz78tnROCkgPPh7-pFgKH4g',
-    appId: '1:617652604655:web:9a17e32d589b497c0d151a',
-    messagingSenderId: '617652604655',
-    projectId: 'guarana-mania-c08e0',
-    authDomain: 'guarana-mania-c08e0.firebaseapp.com',
-    storageBucket: 'guarana-mania-c08e0.appspot.com',
-    measurementId: 'G-0TFMD6T16Y',
+    apiKey: 'AIzaSyAkkpldTshloKEodWFdMGHBFjYHGlUv0Ak',
+    appId: '1:26732554565:web:12289a540dd2972d7c762c',
+    messagingSenderId: '26732554565',
+    projectId: 'guarana-balu',
+    authDomain: 'guarana-balu.firebaseapp.com',
+    storageBucket: 'guarana-balu.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBiZ1_VVqNNDz268vUDq2MknClD9n7emtE',
-    appId: '1:617652604655:android:af6ddafb270992d50d151a',
-    messagingSenderId: '617652604655',
-    projectId: 'guarana-mania-c08e0',
-    storageBucket: 'guarana-mania-c08e0.appspot.com',
+    apiKey: 'AIzaSyCxzwYj539F-1pAvPbp0PPj2-d7xvppob8',
+    appId: '1:26732554565:android:865a6af8fa8191cc7c762c',
+    messagingSenderId: '26732554565',
+    projectId: 'guarana-balu',
+    storageBucket: 'guarana-balu.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCgHw-vLBdiBZTe4LOVNyMDy4yiWZnkYNM',
-    appId: '1:617652604655:ios:36e27dc8ea042da10d151a',
-    messagingSenderId: '617652604655',
-    projectId: 'guarana-mania-c08e0',
-    storageBucket: 'guarana-mania-c08e0.appspot.com',
-    iosClientId:
-        '617652604655-7s0h8s5eq4kqo5poun78ih1pbh8rjl7k.apps.googleusercontent.com',
+    apiKey: 'AIzaSyChMgSOSPTtLyuqbiEWpmwWQpZDoTM2F7E',
+    appId: '1:26732554565:ios:19b4f6510f928fae7c762c',
+    messagingSenderId: '26732554565',
+    projectId: 'guarana-balu',
+    storageBucket: 'guarana-balu.appspot.com',
+    iosClientId: '26732554565-nfjk03ghs6tdm9pia1lkbfhergvasmdp.apps.googleusercontent.com',
     iosBundleId: 'com.example.guaranaMania',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCgHw-vLBdiBZTe4LOVNyMDy4yiWZnkYNM',
-    appId: '1:617652604655:ios:36e27dc8ea042da10d151a',
-    messagingSenderId: '617652604655',
-    projectId: 'guarana-mania-c08e0',
-    storageBucket: 'guarana-mania-c08e0.appspot.com',
-    iosClientId:
-        '617652604655-7s0h8s5eq4kqo5poun78ih1pbh8rjl7k.apps.googleusercontent.com',
+    apiKey: 'AIzaSyChMgSOSPTtLyuqbiEWpmwWQpZDoTM2F7E',
+    appId: '1:26732554565:ios:19b4f6510f928fae7c762c',
+    messagingSenderId: '26732554565',
+    projectId: 'guarana-balu',
+    storageBucket: 'guarana-balu.appspot.com',
+    iosClientId: '26732554565-nfjk03ghs6tdm9pia1lkbfhergvasmdp.apps.googleusercontent.com',
     iosBundleId: 'com.example.guaranaMania',
   );
 }

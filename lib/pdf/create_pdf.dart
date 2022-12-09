@@ -42,10 +42,6 @@ class CreatePdf extends StatelessWidget {
     String cliente,
     String formadepagamento,
   ) async {
-    final imagenAgronomic =
-        (await rootBundle.load('assets/logo_pdf.png')).buffer.asUint8List();
-    final qrcode =
-        (await rootBundle.load('assets/qrcode.png')).buffer.asUint8List();
     final fontRoboto = await PdfGoogleFonts.robotoMonoBold();
     final emoji = await PdfGoogleFonts.notoColorEmoji();
 
@@ -72,14 +68,14 @@ class CreatePdf extends StatelessWidget {
                     ),
                   ),
                 ),
-                pw.Center(
-                  child: pw.Image(
-                    pw.MemoryImage(
-                      imagenAgronomic,
-                    ),
-                    height: 65,
-                  ),
-                ),
+                // pw.Center(
+                //   child: pw.Image(
+                //     pw.MemoryImage(
+                //       imagenAgronomic,
+                //     ),
+                //     height: 65,
+                //   ),
+                // ),
                 line(),
                 dualline(
                   textCustom(
@@ -149,14 +145,14 @@ class CreatePdf extends StatelessWidget {
                   ],
                 ),
                 line(),
-                pw.Center(
-                  child: pw.Image(
-                    pw.MemoryImage(
-                      qrcode,
-                    ),
-                    height: 75,
-                  ),
-                ),
+                // pw.Center(
+                //   child: pw.Image(
+                //     pw.MemoryImage(
+                //       qrcode,
+                //     ),
+                //     height: 75,
+                //   ),
+                // ),
                 pw.Center(
                   child: pw.Text(
                     'Obrigado pela preferência 🖤!',

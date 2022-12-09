@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:flutter/material.dart';
 import 'package:guarana_mania/components/text_field_custom.dart';
 import 'package:guarana_mania/global/color_global.dart';
 import 'package:guarana_mania/model/produtos.dart';
@@ -40,7 +38,7 @@ class _EstoqueEditAddState extends State<EstoqueEditAdd> {
         backgroundColor: ColorGlobal.colorsbackground,
         centerTitle: true,
         title: const Text(
-          'Casatrar produto',
+          'Cadastro De Produtos',
           style: TextStyle(color: Colors.white),
         ),
       ),

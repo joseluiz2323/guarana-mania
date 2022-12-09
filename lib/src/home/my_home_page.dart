@@ -78,190 +78,102 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/logo.png',
-              scale: 3,
-            ),
-            Center(
-              child: Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  LoginData().isAdmin
-                      ? buthonHomePage(
-                          size,
-                          'Cadastra produto',
-                          'estoque-pronto',
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HomeEstoque(),
-                              ),
-                            );
-                          },
-                        )
-                      : const SizedBox(),
-                  LoginData().isAdmin
-                      ? buthonHomePage(
-                          size,
-                          'Contole de estoque',
-                          'estoque',
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const HomeContollerDeEstoque(),
-                              ),
-                            );
-                          },
-                        )
-                      : const SizedBox(),
-                  buthonHomePage(
-                    size,
-                    'Vendas',
-                    'cart',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomeVendas(),
-                        ),
-                      );
-                    },
-                  ),
-                  buthonHomePage(
-                    size,
-                    'Produtos',
-                    'package',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomeProdutos(),
-                        ),
-                      );
-                    },
-                  ),
-                  LoginData().isAdmin
-                      ? buthonHomePage(
-                          size,
-                          'Relatorio de Vendas',
-                          'report',
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HomeRelatorio(),
-                              ),
-                            );
-                          },
-                        )
-                      : Container(),
-                  Card(
-                    color: const Color.fromARGB(255, 220, 180, 226),
-                    child: SizedBox(
-                      height: 200,
-                      width: 190,
-                      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                        stream: FirebaseFirestore.instance
-                            .collection('status')
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return const Center(
-                              child: Text('Erro ao carregar produtos'),
-                            );
-                          }
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 10),
-                              Text(
-                                isSwitched ? 'ABERTO' : 'FECHADO',
-                                style: TextStyle(
-                                  color: isSwitched ? Colors.green : Colors.red,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const Text(
-                                'Situção da loja',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              Switch(
-                                value: isSwitched,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isSwitched = value;
-                                    FirebaseFirestore.instance
-                                        .collection('status')
-                                        .doc('GIMTdFGton7oPKEQGDY5')
-                                        .update({
-                                      'status': isSwitched,
-                                    });
-                                  });
-                                },
-                                activeTrackColor: Colors.lightGreenAccent,
-                                activeColor: Colors.green,
-                              ),
-                              Text(
-                                'Visitas: ${snapshot.data!.docs.first.data()['count']}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              const Spacer(),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  height: 30,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      FirebaseFirestore.instance
-                                          .collection('status')
-                                          .doc('GIMTdFGton7oPKEQGDY5')
-                                          .update({
-                                        'count': 0,
-                                      });
-                                    },
-                                    child: const Text('Zerar'),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/logo.png',
+                scale: 3,
               ),
-            ),
-          ],
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              Center(
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  
+                  children: [
+                    LoginData().isAdmin
+                        ? buthonHomePage(
+                            'Cadastra produto',
+                            'estoque-pronto',
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeEstoque(),
+                                ),
+                              );
+                            },
+                          )
+                        : const SizedBox(),
+                    LoginData().isAdmin
+                        ? buthonHomePage(
+                            'Contole de estoque',
+                            'estoque',
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const HomeContollerDeEstoque(),
+                                ),
+                              );
+                            },
+                          )
+                        : const SizedBox(),
+                    buthonHomePage(
+                      'Vendas',
+                      'cart',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeVendas(),
+                          ),
+                        );
+                      },
+                    ),
+                    buthonHomePage(
+                      'Produtos',
+                      'package',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeProdutos(),
+                          ),
+                        );
+                      },
+                    ),
+                    LoginData().isAdmin
+                        ? buthonHomePage(
+                            'Relatorio de Vendas',
+                            'report',
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeRelatorio(),
+                                ),
+                              );
+                            },
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget buthonHomePage(
-    size,
     String text,
     String imagen, {
     required Function onPressed,
@@ -275,20 +187,19 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Card(
         color: ColorGlobal.colorsbackground,
         child: SizedBox(
-          height: 200,
-          width: 190,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(30),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
                       child: Image.asset(
                         'assets/icons_menu/$imagen.png',
                         color: Colors.white,
+                        scale: 2,
                       ),
                     ),
                     Padding(

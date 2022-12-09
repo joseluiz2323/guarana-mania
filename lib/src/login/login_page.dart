@@ -15,8 +15,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final loginController = TextEditingController();
-  final senhaController = TextEditingController();
+  TextEditingController loginController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
   Future<void> login() async {
     final usuariosRef = await FirebaseFirestore.instance
         .collection('login')
@@ -32,83 +32,96 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    lerisLogged().then(
+      (logged) async {
+        loginController.text = logged[0];
+        senhaController.text = logged[1];
+        Future.delayed(
+          const Duration(seconds: 1),
+          () {
+            login().then(
+              (value) {
+                if (LoginData().logged) {
+                  gravarisLogged(loginController.text, senhaController.text);
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => const MyHomePage()),
+                    (route) => false,
+                  );
+                }
+              },
+            );
+          },
+        );
+      },
+    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    lerisLogged().then((logged) async {
-      loginController.text = logged[0];
-      senhaController.text = logged[1];
-      Future.delayed(const Duration(seconds: 1), () {
-        login().then(
-          (value) {
-            if (LoginData().logged) {
-              gravarisLogged(loginController.text, senhaController.text);
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const MyHomePage()),
-                (route) => false,
-              );
-            }
-          },
-        );
-      });
-    });
-    // ignore: newline-before-return
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/icon.png',
-              ),
-              TextFieldCustom(
-                label: 'Usuário',
-                controller: loginController,
-              ),
-              TextFieldCustom(
-                label: 'Senha',
-                obscure: true,
-                controller: senhaController,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                child: const SizedBox(
-                  height: 50,
-                  width: 120,
-                  child: Center(
-                    child: Text('Login'),
-                  ),
+      body: Container(
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/icon.png',
+                  width: 200,
                 ),
-                onPressed: () {
-                  login().then(
-                    (value) {
-                      if (LoginData().logged) {
-                        gravarisLogged(
-                          loginController.text,
-                          senhaController.text,
-                        );
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (_) => const MyHomePage()),
-                          (route) => false,
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Usuário ou senha inválidos'),
-                          ),
-                        );
-                      }
-                    },
-                  );
-                },
-              ),
-            ],
+                TextFieldCustom(
+                  label: 'Usuário',
+                  controller: loginController,
+                ),
+                TextFieldCustom(
+                  label: 'Senha',
+                  obscure: true,
+                  controller: senhaController,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  child: const SizedBox(
+                    height: 50,
+                    width: 120,
+                    child: Center(
+                      child: Text('Login'),
+                    ),
+                  ),
+                  onPressed: () {
+                    login().then(
+                      (value) {
+                        if (LoginData().logged) {
+                          gravarisLogged(
+                            loginController.text,
+                            senhaController.text,
+                          );
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const MyHomePage()),
+                            (route) => false,
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Usuário ou senha inválidos'),
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

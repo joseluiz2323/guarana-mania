@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "617652604655",
-    "project_id": "guarana-mania-c08e0",
-    "storage_bucket": "guarana-mania-c08e0.appspot.com"
+    "project_number": "26732554565",
+    "project_id": "guarana-balu",
+    "storage_bucket": "guarana-balu.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:617652604655:android:af6ddafb270992d50d151a",
+        "mobilesdk_app_id": "1:26732554565:android:865a6af8fa8191cc7c762c",
         "android_client_info": {
           "package_name": "com.example.guarana_mania"
         }
       },
       "oauth_client": [
         {
-          "client_id": "617652604655-3jbqc8k0g2dup4lt7vgn0fhi7d01bueh.apps.googleusercontent.com",
+          "client_id": "26732554565-5n15v5v4373feu5u9e178tr4om7kpm2m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBiZ1_VVqNNDz268vUDq2MknClD9n7emtE"
+          "current_key": "AIzaSyCxzwYj539F-1pAvPbp0PPj2-d7xvppob8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "617652604655-3jbqc8k0g2dup4lt7vgn0fhi7d01bueh.apps.googleusercontent.com",
+              "client_id": "26732554565-5n15v5v4373feu5u9e178tr4om7kpm2m.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "26732554565-nfjk03ghs6tdm9pia1lkbfhergvasmdp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.guaranaMania"
+              }
             }
           ]
         }
