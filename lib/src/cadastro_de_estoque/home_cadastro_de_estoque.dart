@@ -37,7 +37,6 @@ class HomeEstoque extends StatelessWidget {
           if (produtos.isEmpty) {
             return const Center(child: Text('Nenhum produto encontrado'));
           }
-          // ignore: newline-before-return
           return ListView.builder(
             itemCount: produtos.length + 1,
             itemBuilder: (_, index) {
@@ -48,8 +47,6 @@ class HomeEstoque extends StatelessWidget {
               final produto = Produto.fromJson(
                 produtoData.data(),
               );
-
-              // ignore: newline-before-return
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Card(
